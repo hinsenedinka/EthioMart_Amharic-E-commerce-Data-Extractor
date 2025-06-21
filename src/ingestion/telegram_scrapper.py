@@ -43,7 +43,7 @@ async def scrape_channel(client, channel_username, writer, min_id=0):
 
     # Use min_id to only get messages strictly newer than the last scraped one
     # limit=None means fetch all messages until min_id is reached (or no more messages)
-    async for message in client.iter_messages(entity, limit=None, min_id=min_id):
+    async for message in client.iter_messages(entity, limit=1000, min_id=min_id):
         writer.writerow([channel_title, channel_username, message.id, message.message, message.date])
 
 # Initialize the client once
