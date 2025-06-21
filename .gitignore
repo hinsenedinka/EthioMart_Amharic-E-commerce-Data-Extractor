@@ -4,3 +4,4 @@ __pycache__/
 .env
 data/raw/telegram_data.csv
 scraping_session.session
+data/processed
