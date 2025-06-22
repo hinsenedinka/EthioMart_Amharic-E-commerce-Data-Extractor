@@ -5,21 +5,21 @@ import os
 # Incorporating etnltk
 try:
     from etnltk import Amharic
-    # You might also want these for general cleaning if etnltk.Amharic doesn't do it internally
-    # from etnltk.common.preprocessing import (
-    #     remove_whitespaces, remove_special_characters, remove_tags,
-    #     remove_emojis, remove_links, remove_email
-    # )
-    # from etnltk.common.ethiopic import remove_ethiopic_punctuation
+    from etnltk.common.preprocessing  import (remove_whitespaces, remove_special_characters, remove_tags,
+                                              remove_emojis, remove_links, remove_email,remove_english_chars,remove_arabic_chars,
+                                              remove_chinese_chars,remove_special_characters)
+    
+    from etnltk.common.ethiopic import (remove_ethiopic_punctuation,remove_ethiopic_digits,remove_ethiopic_digits)
+    from etnltk.lang.am import clean_amharic
+    from etnltk.lang.am import normalize
+    from etnltk.tokenize.am import word_tokenize
+
 except ImportError:
     print("etnltk modules are not installed. Please install it using 'pip install etnltk'.")
     exit()
 
 # Amharic preprocessing function
 def preprocess_amharic_text(text):
-    # CRITICAL: Convert to string and strip whitespace.
-    # df_raw['Message'].fillna('') in main() already ensures 'text' is a string,
-    # but 'strip()' is essential to handle empty strings or strings with only whitespace.
     cleaned_text = str(text).strip()
 
     # CRITICAL: Check if the string is empty *after* stripping.
@@ -27,8 +27,13 @@ def preprocess_amharic_text(text):
         return [] # Return an empty list for effectively empty messages
 
     try:
-        doc = Amharic(cleaned_text) # Pass the cleaned, non-empty string to Amharic()
-        preprocessed_tokens = doc.words
+        custom_pipeline=[remove_whitespaces, remove_special_characters, remove_tags,
+                   remove_emojis, remove_links, remove_email, remove_ethiopic_digits,
+                   remove_ethiopic_punctuation,remove_english_chars,remove_arabic_chars,remove_chinese_chars,remove_special_characters]
+
+        doc = clean_amharic(cleaned_text,pipeline=custom_pipeline)
+        Message_doc=normalize(doc) # avoided using Amharic to extract digits
+        preprocessed_tokens = word_tokenize(Message_doc,return_word=False)
         return preprocessed_tokens
     except ValueError as e:
         # This specific ValueError indicates etnltk didn't like the input.
