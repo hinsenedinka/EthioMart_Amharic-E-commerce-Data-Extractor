@@ -1,7 +1,8 @@
 .venv/
 __pycache__/
 *.pyc
-.env
+data/processed/preprocessed_telegram_data.csv
 data/raw/telegram_data.csv
 scraping_session.session
-data/processed/preprocessed_telegram_data.csv
+.env
+
