@@ -2,9 +2,7 @@ import pandas as pd
 import re
 import os
 
-# Incorporating etnltk
 try:
-    from etnltk import Amharic
     from etnltk.common.preprocessing  import (remove_whitespaces, remove_special_characters, remove_tags,
                                               remove_emojis, remove_links, remove_email,remove_english_chars,remove_arabic_chars,
                                               remove_chinese_chars,remove_special_characters)
